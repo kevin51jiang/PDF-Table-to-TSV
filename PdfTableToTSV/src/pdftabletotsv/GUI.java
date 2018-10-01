@@ -104,22 +104,31 @@ public class GUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void dispBadPath(){
+        lblError.setText("Please enter a valid, writable output path.");
+    }
+    
     private void btnDewitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDewitActionPerformed
         // TODO add your handling code here:
         String destPath = txtOutputPath.getText();
         String contents = txtaInput.getText();
         File outputFile = new File(destPath);
         
+        if(!destPath.contains(".tsv") ||
+                !destPath.contains(".TSV")) {
+            dispBadPath();
+            return;
+        }
         
         
         try {
             PrintWriter writer = new PrintWriter(outputFile);
-            contents = contents.replace(' ', '\t');
+            contents = contents.replace(' ', '\t').replace("\n", "\r\n");
             writer.write(contents);
             writer.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-            lblError.setText("Please enter a valid, writable output path.");
+            dispBadPath();
         }
         
         
